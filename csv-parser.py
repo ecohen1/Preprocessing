@@ -5,13 +5,14 @@ import pandas as pd
 import math
 
 #csv to dataframe
-trueDF = pd.read_csv("C:/Users/Joel/Desktop/data.csv")
-testDF = pd.read_csv("C:/Users/Joel/Desktop/data2.csv")
+trueDF = pd.read_csv("C:/Users/Joel/Desktop/data3.csv")
+testDF = pd.read_csv("C:/Users/Joel/Desktop/data4.csv")
 
 num_missed = 0
 true_index = 0
 missed_arr = []
 wrong_val_arr = []
+wrong_val_index_arr = []
 diff_arr = []
 
 for index in testDF.index:
@@ -26,6 +27,7 @@ for index in testDF.index:
         true_data = trueDF.values[true_index][i]
         if data != true_data:
             wrong_val_arr.append(data)
+            wrong_val_index_arr.append(i)
             diff_arr.append(abs(data-true_data))
     true_index += 1
 
@@ -38,4 +40,7 @@ if math.isnan(avg_diff):
         
 print "missed", num_missed, "out of", len(trueDF.index)
 print num_wrong, "wrong values at an avg of", avg_wrong
-print "the average amount off was", avg_diff
+if num_wrong > 0:
+    print "the average amount off was", avg_diff
+    for j in range(1,6):
+        print wrong_val_index_arr.count(j), "values wrong in column", j+1
