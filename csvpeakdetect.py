@@ -2,7 +2,7 @@ import peakdetect as pd
 from numpy import genfromtxt
 import matplotlib.pyplot as plt
 
-data = genfromtxt('moving-average-results.csv', delimiter=',')
+data = genfromtxt('data/moving-average-results.csv', delimiter=',')
 
 avgdata = [data[i][0] for i in range(len(data))]
 labeldata = [data[i][4]*.75 for i in range(len(data))]
