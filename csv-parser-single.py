@@ -1,11 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Mar 02 15:53:23 2016
-
-@author: Joel
-"""
-
-# -*- coding: utf-8 -*-
 
 import numpy as np
 import pandas as pd
@@ -32,7 +25,7 @@ for index in testDF.index:
         while trueDF.values[true_index][0] < testDF.values[index][0]:
             missed_arr.append(trueDF.values[true_index])
             true_index += 1
-            
+
         #compare the data in the matching rows
         for i in range(1):
             data = testDF.values[index][i]
@@ -47,13 +40,13 @@ if trueDF.values[-1][0] > testDF.values[-1][0]:
     num_missed = len(missed_arr) + (trueDF.values[-1][0] - testDF.values[-1][0])
 else:
     num_missed = len(missed_arr)
-    
+
 num_wrong = len(wrong_val_arr)
 avg_wrong = np.average(wrong_val_arr)
 avg_diff = np.average(diff_arr)
 if math.isnan(avg_diff):
     avg_diff = 0
-        
+
 print "missed", num_missed, "out of", len(trueDF.index)
 print num_wrong, "wrong values at an avg of", avg_wrong
 if num_wrong > 0:
