@@ -1,3 +1,9 @@
+'''
+This code reads in the output of windows.py, and performs feature extraction.
+    It takes in the ~20-50 rows per window, and outputs a single row with all
+        possible features to filename
+'''
+
 from scipy import stats
 import numpy as np
 import csv
@@ -16,6 +22,7 @@ audio = []
 output = []
 
 filename = 'data/panera2features.csv'
+
 with open(filename, 'wb') as csvfile:
     writer = csv.writer(csvfile)
 

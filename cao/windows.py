@@ -1,3 +1,9 @@
+'''
+This code takes in the output of csv-modifier.py and splits it into 500 millisecond
+    windows with 50 percent overlap, writing the output to filename in the same format
+        as the input
+'''
+
 import numpy as np
 import csv
 
@@ -10,15 +16,18 @@ NOTHING = 3
 SWALLOW = 4
 
 maxTimeMilli = 500
-halfTimeMilli = maxTimeMilli/2
+percentOverlap = 0.5
+newBeginTimeMilli = maxTimeMilli*percentOverlap
 
 startRow = 0
-halfwayIndex = 0
+newBeginIndex = 0
 windowIndex = 0
-halfwayIndexFound = False
+newBeginIndexFound = False
 endFound = False
 labels = ['band1','band2','audio','timestamp','output','index']
 windows = []
+
+filename = 'data/panera3windows.csv'
 
 while not endFound and len(data) > 0:
 
@@ -39,15 +48,14 @@ while not endFound and len(data) > 0:
             nextTimeDiff = nextTime - time
         else:
             nextTimeDiff = maxTimeMilli
-        # print time, oldTime, timeDiff, nextTimeDiff, sumTimeDiffs, windowIndex
         oldTime = time
         timeOptions = [sumTimeDiffs, sumTimeDiffs + nextTimeDiff]
 
-        if timeOptions[1] > halfTimeMilli and not halfwayIndexFound:
-            halfwayIndex = startRow + packetCount
-            halfwayIndexFound = True
-            if halfTimeMilli - timeOptions[0] > halfTimeMilli - timeOptions[1]:
-                halfwayIndex += 1
+        if timeOptions[1] > newBeginTimeMilli and not newBeginIndexFound:
+            newBeginIndex = startRow + packetCount
+            newBeginIndexFound = True
+            if newBeginTimeMilli - timeOptions[0] > newBeginTimeMilli - timeOptions[1]:
+                newBeginIndex += 1
 
         elif timeOptions[1] > maxTimeMilli:
             if maxTimeMilli-timeOptions[0] > maxTimeMilli-timeOptions[1]:
@@ -56,13 +64,8 @@ while not endFound and len(data) > 0:
             newWindow = data[startRow:startRow+packetCount]
             newWindowPlusIndex = []
             for newRow in newWindow:
-                # print len(newRow), len(np.array([windowIndex]))
-                # np.concatenate(newRow, np.array([windowIndex]))
                 newList = newRow.tolist() + [windowIndex]
-                # print len(newList)
                 newWindowPlusIndex.append(newList)
-            # newWindow = [ newRow + [windowIndex] for newRow in newWindow ]
-            # print len(row), len(newWindowPlusIndex[0])
             windows.extend(newWindowPlusIndex)
             windowIndex += 1
             break
@@ -71,9 +74,7 @@ while not endFound and len(data) > 0:
             endFound = True
             break
 
-    data = data[halfwayIndex:]
-
-filename = 'data/panera3windows.csv'
+    data = data[newBeginIndex:]
 
 with open(filename, 'wb') as csvfile:
     writer = csv.writer(csvfile)

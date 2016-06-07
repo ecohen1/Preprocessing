@@ -1,3 +1,8 @@
+'''
+This code takes in a csv file with data logged by the phone application (NeckMonitor)
+    and filters out any periods that are labeled as nothing (3), writing the result to 'filename'
+'''
+
 import numpy as np
 import csv
 
